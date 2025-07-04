@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Member Details</title>
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    h2 {
+      color: #00ffc8;
+      text-shadow: 0 0 10px #00ffd5;
+    }
+
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #00ffc8;
+      box-shadow: 0 0 20px #00ffc8;
+      transition: transform 0.3s;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.08);
+    }
+
+    .info-table {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .info-table th {
+      background: rgba(0, 255, 255, 0.1);
+      color: #00ffe0;
+    }
+
+    .info-table td {
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+    }
+
+    .info-table tr:hover td {
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.06);
+      border: none;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    .card-header {
+      background: linear-gradient(90deg, #0d6efd, #00d4ff);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .badge {
+      font-size: 1rem;
+      padding: 0.4rem 0.7rem;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-back {
+      transition: all 0.3s;
+    }
+
+    .btn-back:hover {
+      background: #00d4ff;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00d4ff;
+    }
+  </style>
+</head>
+<body>
+	<div th:replace="~{fragments/header :: header}"></div>
+<div class="container mt-5 mb-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">👤 Member Details</h2>
+    <img th:src="@{'/images/' + ${member.profilePicture}}" alt="Profile" class="profile-img shadow mt-3">
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover info-table shadow">
+      <tbody>
+        <tr><th>Full Name</th><td th:text="${member.fullName}"></td></tr>
+        <tr><th>Phone</th><td th:text="${member.phone}"></td></tr>
+        <tr><th>Email</th><td th:text="${member.email}"></td></tr>
+        <tr><th>Gender</th><td th:text="${member.gender}"></td></tr>
+        <tr><th>Age</th><td th:text="${member.age} + ' yrs'"></td></tr>
+        <tr><th>Height</th><td th:text="${member.height} + ' cm'"></td></tr>
+        <tr><th>Weight</th><td th:text="${member.weight} + ' kg'"></td></tr>
+        <tr><th>Emergency Contact</th><td th:text="${member.emergencyContact}"></td></tr>
+        <tr><th>Address</th><td th:text="${member.address}"></td></tr>
+        <tr><th>Payment Mode</th><td th:text="${member.paymentMode}"></td></tr>
+        <tr><th>Amount Paid</th><td th:text="'₹ ' + ${member.amountPaid}"></td></tr>
+        <tr><th>Registration Date</th><td th:text="${member.registrationDate}"></td></tr>
+        <tr><th>Membership Duration</th><td th:text="${member.membershipDuration} + ' months'"></td></tr>
+        <tr>
+          <th>Payment Status</th>
+          <td>
+            <span th:if="${member.paymentStatus}" class="badge bg-success">✔ Paid</span>
+            <span th:unless="${member.paymentStatus}" class="badge bg-danger">✖ Unpaid</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card mt-4 shadow-lg">
+    <div class="card-header text-center">
+      📅 Membership Expiry Info
+    </div>
+    <div class="card-body text-center">
+      <p class="bg-danger text-white p-2 rounded shadow-sm">
+        <strong>Expiry Date:</strong> <span th:text="${expiryDate}"></span>
+      </p>
+
+      <div th:if="${daysLeft > 0}">
+        <p class="text-success fw-bold">⏳ <span th:text="${daysLeft}"></span> day(s) remaining</p>
+        <span class="badge bg-warning text-dark">Membership valid</span>
+      </div>
+
+      <div th:if="${daysLeft <= 0}">
+        <p class="text-danger fw-bold">❌ Membership expired</p>
+        <span class="badge bg-danger">Expired</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <!-- Only admins can see this button -->
+    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/members" class="btn btn-secondary btn-back">
+      ← Back to Member List
+    </a>
+  </div>
+</div>
+<!-- Include Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

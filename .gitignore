@@ -1,0 +1,29 @@
+# Ignore compiled classes and build files
+
+/target
+
+*.class
+
+*.log
+
+
+# Ignore environment or secret files
+
+.env
+
+src/main/resources/application-secrets.properties
+
+
+# IDE-specific files
+
+.idea/
+
+*.iml
+
+
+# OS files
+
+.DS_Store
+
+Thumbs.db
+

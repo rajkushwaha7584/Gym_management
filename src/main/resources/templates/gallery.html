@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - GymByRaj</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+		background: linear-gradient(to right,rgb(128, 255, 255), rgb(255, 255, 255),rgb(128, 128, 128));
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .section-title {
+      font-weight: bold;
+      color: #0d6efd;
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .nav-pills .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    .gallery-card {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .gallery-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      transition: 0.4s ease;
+    }
+
+    .tab-pane {
+      margin-top: 20px;
+    }
+
+    #addPhotoBtn {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .hover-area:hover #addPhotoBtn {
+      opacity: 1 !important;
+    }
+
+    .img-overlay {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Gallery Container -->
+<div class="container py-5 position-relative hover-area">
+
+	<!-- Admin Add Photo Button -->
+	<a id="addPhotoBtn"
+	   sec:authorize="hasRole('ROLE_ADMIN')"
+	   href="/admin/gallery"
+	   class="btn btn-success position-absolute top-0 end-0 m-3 px-4 py-2 shadow-lg rounded-pill"
+	   style="z-index: 10; font-weight: bold; font-size: 1rem;">
+	   <i class="bi bi-plus-circle-fill me-1"></i> 	➕Add Photo
+	</a>
+
+	<!-- Section Title -->
+	<h2 class="section-title text-center fw-bold mb-4"
+	    style="background: linear-gradient(90deg, #0d6efd, #6610f2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.2rem;">
+	     Explore Our Gym Gallery
+	</h2>
+
+	<!-- Filter Tabs with Glassmorphism -->
+	<div class="d-flex justify-content-center">
+	  <ul class="nav nav-pills bg-white bg-opacity-50 rounded-pill px-3 py-2 shadow-sm backdrop-blur"
+	      style="backdrop-filter: blur(10px);" id="galleryTabs" role="tablist">
+
+	    <li class="nav-item mx-2" role="presentation">
+	      <button class="nav-link active rounded-pill px-4 py-2"
+	              id="trainers-tab"
+	              data-bs-toggle="pill"
+	              data-bs-target="#trainers"
+	              type="button"
+	              style="transition: all 0.3s ease;">
+	        🏋️ Trainers
+	      </button>
+	    </li>
+
+	    <li class="nav-item mx-2" role="presentation">
+	      <button class="nav-link rounded-pill px-4 py-2"
+	              id="members-tab"
+	              data-bs-toggle="pill"
+	              data-bs-target="#members"
+	              type="button"
+	              style="transition: all 0.3s ease;">
+	        💪 Members
+	      </button>
+	    </li>
+
+	    <li class="nav-item mx-2" role="presentation">
+	      <button class="nav-link rounded-pill px-4 py-2"
+	              id="transformations-tab"
+	              data-bs-toggle="pill"
+	              data-bs-target="#transformations"
+	              type="button"
+	              style="transition: all 0.3s ease;">
+	        🔥 Transformations
+	      </button>
+	    </li>
+
+	  </ul>
+	</div>
+
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="galleryTabContent">
+
+    <!-- Trainers -->
+    <div class="tab-pane fade show active" id="trainers">
+      <div class="row g-4">
+        <div class="col-md-4" th:each="image : ${trainerImages}">
+          <div class="gallery-card position-relative">
+            <img th:src="@{'/gallery/image/' + ${image.filename}}" th:alt="${image.caption}" class="gallery-img">
+            <div class="img-overlay" th:text="${image.title}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Members -->
+    <div class="tab-pane fade" id="members">
+      <div class="row g-4">
+        <div class="col-md-4" th:each="image : ${memberImages}">
+          <div class="gallery-card position-relative">
+            <img th:src="@{'/gallery/image/' + ${image.filename}}" th:alt="${image.caption}" class="gallery-img">
+            <div class="img-overlay" th:text="${image.title}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transformations -->
+    <div class="tab-pane fade" id="transformations">
+      <div class="row g-4">
+        <div class="col-md-4" th:each="image : ${transformationImages}">
+          <div class="gallery-card position-relative">
+            <img th:src="@{'/gallery/image/' + ${image.filename}}" th:alt="${image.caption}" class="gallery-img">
+            <div class="img-overlay" th:text="${image.title}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gym Membership Registration</title>
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(35deg, #0d6efd, #6610f2, #20c997, #ffc107);
+      background-size: 400% 400%;
+      animation: animatedGradient 5s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    @keyframes animatedGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h2 {
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      margin-top: 40px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #212529;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #0d6efd, #20c997);
+      border: none;
+      font-weight: bold;
+      transition: transform 0.2s ease, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+    }
+
+    .img-thumbnail {
+      transition: transform 0.3s ease;
+      border: 4px solid #0d6efd;
+      border-radius: 50%;
+    }
+
+    .img-thumbnail:hover {
+      transform: scale(1.05);
+    }
+
+    .select-effect:hover {
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+
+    .toast-success {
+      background: linear-gradient(to right, #198754, #28a745);
+    }
+
+    .alert-danger {
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+      font-weight: 600;
+      border: none;
+    }
+  </style>
+
+</head>
+<body>
+	<div th:replace="~{fragments/header :: header}"></div>
+<div class="container">
+  <h2 class="text-center mt-5">💪 Gym Membership Registration</h2>
+  <div th:if="${message}" class="alert alert-danger text-center fw-bold">
+    <span th:text="${message}"></span>
+  </div>
+
+  <form th:action="@{/register}" th:object="${member}" method="post" class="form-container" novalidate>
+    <input type="hidden" th:field="*{id}"/>
+
+    <div th:if="${#fields.hasErrors()}">
+      <div class="alert alert-danger">
+        <ul>
+          <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" th:field="*{fullName}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Phone Number</label>
+      <input type="text" th:field="*{phone}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" th:field="*{email}" class="form-control" required>
+    </div>
+	
+	<div class="mb-3">
+	  <label class="form-label">Password</label>
+	  <input type="password" th:field="*{password}" class="form-control" required>
+	</div>
+
+    <div class="mb-3">
+      <label class="form-label">Gender</label>
+      <select th:field="*{gender}" class="form-select select-effect" required>
+        <option value="">-- Select Gender --</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Age</label>
+        <input type="number" th:field="*{age}" class="form-control" min="1" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Height (cm)</label>
+        <input type="number" step="0.1" th:field="*{height}" class="form-control" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Weight (kg)</label>
+        <input type="number" step="0.1" th:field="*{weight}" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Emergency Contact</label>
+      <input type="text" th:field="*{emergencyContact}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Address</label>
+      <textarea th:field="*{address}" class="form-control" rows="2" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Membership Duration (months)</label>
+      <input type="number" th:field="*{membershipDuration}" class="form-control" min="1" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Payment Mode</label>
+      <select th:field="*{paymentMode}" class="form-select select-effect" required>
+        <option value="">-- Select Payment Mode --</option>
+        <option value="Online">Online</option>
+        <option value="Offline">Offline</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Amount Paid (₹)</label>
+      <input type="number" th:field="*{amountPaid}" class="form-control" min="0" step="0.01" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Payment Status</label>
+      <select th:field="*{paymentStatus}" class="form-select select-effect" required>
+        <option th:value="true">Paid</option>
+        <option th:value="false">Unpaid</option>
+      </select>
+    </div>
+
+    <div class="mb-3 text-center">
+      <label class="form-label">Profile Picture (Auto Selected)</label>
+      <div>
+        <img id="preview" src="/images/default_male.jpeg" class="img-thumbnail mt-2" style="max-height: 150px;">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" th:text="${member.id} != null ? 'Update' : 'Register'">Submit</button>
+  </form>
+
+  <!-- Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div class="toast toast-success text-white border-0"
+         role="alert" aria-live="assertive" aria-atomic="true"
+         th:if="${message != null}" th:id="'toastSuccess'">
+      <div class="d-flex">
+        <div class="toast-body fw-bold" th:text="${message}"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const genderSelect = document.querySelector('[name="gender"]');
+  const preview = document.getElementById('preview');
+
+  genderSelect.addEventListener('change', () => {
+    const gender = genderSelect.value.toLowerCase();
+    preview.src = gender === "female"
+      ? "/images/default_female.png"
+      : "/images/default_male.jpeg";
+  });
+
+  window.onload = () => {
+    const toastEl = document.getElementById('toastSuccess');
+    if (toastEl) {
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+  };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

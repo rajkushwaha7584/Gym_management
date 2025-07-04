@@ -1,0 +1,30 @@
+<!-- fragments/dumbbell-animation.html -->
+<style>
+  .dumbbell {
+    position: fixed;
+    top: 100px;
+    left: -100px;
+    width: 100px;
+    height: 100px;
+    background: url('/images/dumbbell.png') no-repeat center center/contain;
+    animation: throwDumbbellAnim 1s forwards;
+    z-index: 9999;
+  }
+
+  @keyframes throwDumbbellAnim {
+    to {
+      left: 110%;
+      transform: rotate(720deg);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  function throwDumbbell() {
+    const dumbbell = document.createElement('div');
+    dumbbell.classList.add('dumbbell');
+    document.body.appendChild(dumbbell);
+    setTimeout(() => dumbbell.remove(), 1500);
+  }
+</script>

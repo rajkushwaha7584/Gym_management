@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - GymByRaj</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, red, #1f1c2c, #928dab, aqua);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-radius: 15px;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-body {
+      color: #333;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 100%;
+      height: 260px;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease-in-out;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .flip-card-front.bg-glass {
+      background: rgba(255, 255, 255, 0.2);
+      color: #0d6efd;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .flip-card-back.bg-gradient {
+      background: linear-gradient(135deg, #0d6efd, #6610f2);
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flip-card i {
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
+
+    .flip-card h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .flip-card h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .flip-card p.large-text {
+      font-size: 1.3rem;
+      margin-top: 10px;
+    }
+
+    .flip-card p.small-text {
+      font-size: 1rem;
+      margin-top: 8px;
+      font-style: italic;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .flip-card {
+        height: 220px;
+      }
+
+      .flip-card h1 {
+        font-size: 2.5rem;
+      }
+
+      .flip-card h2 {
+        font-size: 1.6rem;
+      }
+
+      .flip-card i {
+        font-size: 3rem;
+      }
+
+      .flip-card p.large-text,
+      .flip-card p.small-text {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="dashboard-container">
+  <div class="text-center mb-5">
+    <h1>👑 Welcome Admin</h1>
+    <p class="lead">Manage your gym operations with ease 💪</p>
+  </div>
+
+  <!-- Row 1: Core Actions -->
+  <div class="row g-4">
+    <!-- View Members -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow bg-white text-center">
+        <div class="card-body">
+          <i class="bi bi-people-fill text-primary fs-1"></i>
+          <h5 class="card-title mt-3">View All Members</h5>
+          <p class="card-text">Check the list of all registered gym members.</p>
+          <a th:href="@{/members}" class="btn btn-primary w-100">Go to Members</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add New Member -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow bg-white text-center">
+        <div class="card-body">
+          <i class="bi bi-person-plus-fill text-success fs-1"></i>
+          <h5 class="card-title mt-3">Add New Member</h5>
+          <p class="card-text">Register a new member and give them login access.</p>
+          <a th:href="@{/register}" class="btn btn-success w-100">Register Member</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Excel -->
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow bg-white text-center">
+        <div class="card-body">
+          <i class="bi bi-file-earmark-excel-fill text-warning fs-1"></i>
+          <h5 class="card-title mt-3">Export Member Data</h5>
+          <p class="card-text">Download all member data in Excel format.</p>
+          <a th:href="@{/export/excel}" class="btn btn-warning w-100">Export to Excel</a>
+        </div>
+      </div>
+    </div>
+
+	<div class="col">
+	  <div class="card shadow bg-white text-center h-100">
+	    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+	      <i class="bi bi-envelope-paper-fill text-danger fs-1"></i>
+	      <h5 class="card-title mt-3">Reminder Logs</h5>
+	      <p class="card-text">See logs of Email reminders sent to members.</p>
+	      <a href="/admin/reminders" class="btn btn-danger w-100 mt-auto">📧 View Reminder Logs</a>
+	    </div>
+	  </div>
+	</div>
+  </div>
+  
+
+  <!-- Row 2: Flip Cards and Backup -->
+  <div class="row g-4 mt-2">
+    <!-- Total Members -->
+    <div class="col-md-6 col-lg-4">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front bg-glass">
+            <i class="bi bi-people-fill"></i>
+            <h2>Total Members</h2>
+            <p class="small-text">Click to view count</p>
+          </div>
+          <div class="flip-card-back bg-gradient">
+            <h1 th:text="${totalMembers}">0</h1>
+            <p class="large-text">Members in Gym</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deleted Members -->
+    <div class="col-md-6 col-lg-4">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front bg-glass">
+            <i class="bi bi-person-dash-fill text-danger"></i>
+            <h2>Deleted Members</h2>
+            <p class="small-text">Click to view count</p>
+          </div>
+          <div class="flip-card-back bg-gradient">
+            <h1 th:text="${totalDeletedMembers}">0</h1>
+            <p class="large-text">Cancelled Registrations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Backup -->
+    <div class="col-md-12 col-lg-4">
+      <div class="card shadow bg-white text-center h-100">
+        <div class="card-body">
+          <i class="bi bi-cloud-arrow-down-fill text-info fs-1"></i>
+          <h5 class="card-title mt-3">Download Backup</h5>
+          <p class="card-text">Download the latest database backup.</p>
+          <a href="/admin/download-backup" class="btn btn-info w-100">⬇️ Download Latest Backup</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Alerts -->
+  <div class="row g-4 mt-2">
+    <div class="col-12">
+      <div class="card shadow bg-white h-100">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center gap-3">
+          <h5 class="card-title">📅 Membership Alerts</h5>
+          <p class="card-text text-center">Track expiring or expired memberships.</p>
+          <a href="/members/expiring-soon" class="btn btn-outline-warning w-100">🕒 Expiring Soon (≤ 7 Days)</a>
+          <a href="/members/expired" class="btn btn-outline-secondary w-100">🚫 Expired Members</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
